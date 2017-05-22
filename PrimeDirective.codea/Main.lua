@@ -12,12 +12,12 @@ function draw()
     -- These values must be in draw() in order to stay
     background(40, 40, 50)
     fill(255, 255, 255, 255)
-    text(instructions, WIDTH/2, HEIGHT*0.9)
     
-    -- Determines settings for all text
+    -- Determines settings for next text to be updated
     font("Courier")
     fontSize(60)
     textWrapWidth(WIDTH - 20)
+    text(instructions, WIDTH/2, HEIGHT*0.9)
     
     if user_input then
         text(user_input, WIDTH/2, HEIGHT*0.75)
@@ -27,12 +27,45 @@ end
 -- Keyboard input handler that updates the string displayed on the screen
 function keyboard(key)
     if key == RETURN then
-        
+        run(tonumber(user_input))
     elseif key == BACKSPACE then
        user_input = string.sub(user_input, 1, -2)
     else
        user_input = user_input .. key
     end
+end
+
+function run(number)
+    local primes = sieve(number)
+
+    for key, value in pairs(primes) do
+        if (value) then
+            -- We want the values to go into the console for now to keep performance
+            print(key)
+        end
+    end
+end
+
+function sieve (x)
+  if x < 2 then 
+     return false
+  end
+    
+  local prime = {}
+  prime[1] = false
+  for i = 2, x do 
+      prime[i] = true 
+  end 
+
+  for i = 2, math.sqrt(x) do
+      if prime[i] then
+         for j = i*i, x, i do
+             prime[j] = false
+         end
+      end
+  end
+
+  return prime
 end
 
 -- Event handler for touch input
